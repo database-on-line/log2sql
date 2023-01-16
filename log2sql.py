@@ -97,14 +97,23 @@ def fix_object(value):
         return value
 
 
+def compare_items(k,v):
+    # caution: if v is NULL, may need to process
+    if v == 'NULL':
+        return '`%s` IS %s' % (k, v)
+    else:
+        return '`%s`=%s' % (k, v)
+
+
 def generate_sql_pattern(dml_type, column_info=None, flashback=False, index_info=None, schema_info=None):
     template = ''
     if flashback is True:
         if dml_type == "insert":
             if index_info != {}:
-                filter_criteria = ' AND '.join(['`%s`=%s' % (x,fix_object(y)) for x,y in index_info.items()])
+                filter_criteria = ' AND '.join([compare_items(x,fix_object(y)) for x,y in index_info.items()])
             else:
-                filter_criteria = ' AND '.join(['`%s`=%s' % (x,fix_object(y)) for x,y in column_info['values'].items()])
+                filter_criteria = ' AND '.join([compare_items(x,fix_object(y)) for x,y in column_info['values'].items()])
+
             template = 'DELETE FROM {0} WHERE {1} LIMIT 1;'.format(
                 schema_info, filter_criteria)
         elif dml_type == "delete":
@@ -115,9 +124,9 @@ def generate_sql_pattern(dml_type, column_info=None, flashback=False, index_info
             )
         elif dml_type == "update":
             if index_info != {}:
-                filter_criteria = ' AND '.join(['`%s`=%s' % (x,fix_object(y)) for x,y in index_info.items()])
+                filter_criteria = ' AND '.join([compare_items(x,fix_object(y)) for x,y in index_info.items()])
             else:
-                filter_criteria = ' AND '.join(['`%s`=%s' % (x,fix_object(y)) for x,y in column_info['after_values'].items()])
+                filter_criteria = ' AND '.join([compare_items(x,fix_object(y)) for x,y in column_info['after_values'].items()])
             template = 'UPDATE {0} SET {1} WHERE {2} LIMIT 1;'.format(
                 schema_info,
                 ', '.join(['`%s`=%s' % (x,fix_object(y)) for x,y in column_info['before_values'].items()]),
@@ -131,16 +140,17 @@ def generate_sql_pattern(dml_type, column_info=None, flashback=False, index_info
             )
         elif dml_type == "delete":
             if index_info != {}:
-                filter_criteria = ' AND '.join(['`%s`=%s' % (x,fix_object(y)) for x,y in index_info.items()])
+                filter_criteria = ' AND '.join([compare_items(x,fix_object(y)) for x,y in index_info.items()])
             else:
-                filter_criteria = ' AND '.join(['`%s`=%s' % (x,fix_object(y)) for x,y in column_info['values'].items()])
+                filter_criteria = ' AND '.join([compare_items(x,fix_object(y)) for x,y in column_info['values'].items()])
             template = 'DELETE FROM {0} WHERE {1} LIMIT 1;'.format(
                 schema_info, filter_criteria)
+
         elif dml_type == "update":
             if index_info != {}:
-                filter_criteria = ' AND '.join(['`%s`=%s' % (x,fix_object(y)) for x,y in index_info.items()])
+                filter_criteria = ' AND '.join([compare_items(x,fix_object(y)) for x,y in index_info.items()])
             else:
-                filter_criteria = ' AND '.join(['`%s`=%s' % (x,fix_object(y)) for x,y in column_info['before_values'].items()])
+                filter_criteria = ' AND '.join([compare_items(x,fix_object(y)) for x,y in column_info['before_values'].items()])
             template = 'UPDATE {0} SET {1} WHERE {2} LIMIT 1;'.format(
                 schema_info,
                 ', '.join(['`%s`=%s' % (x,fix_object(y)) for x,y in column_info['after_values'].items()]),
