@@ -13,6 +13,7 @@ def is_valid_datetime(string):
     except:
         return False
 
+
 def command_line_args(args):
     need_print_help = False if args else True
     parser = parse_args()
@@ -22,8 +23,8 @@ def command_line_args(args):
         sys.exit(1)
     if not args.start_file:
         raise ValueError('Lack of parameter: start_file')
-    if args.flashback and args.stop_never:
-        raise ValueError('Only one of flashback or stop-never can be True')
+    # if args.flashback and args.stop_never:
+    #     raise ValueError('Only one of flashback or stop-never can be True')
     if args.flashback and args.no_pk:
         raise ValueError('Only one of flashback or no_pk can be True')
     start_time = vars(args)['--start-datetime']
@@ -63,7 +64,7 @@ def parse_args():
     parser.add_argument('--help', dest='help', action='store_true', help='help information', default=False)
 
     schema = parser.add_argument_group('schema filter')
-    schema.add_argument('-d', '--database', '-d', dest='database', type=str, nargs='*',
+    schema.add_argument('-d', '--database', '-d', dest='database', type=str,
                         help='dbs you want to process', default='')
     schema.add_argument('-t', '--tables', dest='tables', type=str, nargs='*',
                         help='tables you want to process', default='')
@@ -71,7 +72,7 @@ def parse_args():
     event = parser.add_argument_group('type filter')
     event.add_argument('--only-dml', dest='only_dml', action='store_true', default=False,
                        help='only print dml, ignore ddl')
-    event.add_argument('--sql-type', dest='sql_type', type=str, nargs='*', default=['INSERT', 'UPDATE', 'DELETE'],
+    event.add_argument('--sql-type', dest='sql_type', type=str, nargs='*', default=['insert', 'update', 'delete'],
                        help='Sql type you want to process, support INSERT, UPDATE, DELETE.')
 
     # exclusive = parser.add_mutually_exclusive_group()
@@ -85,7 +86,7 @@ def parse_args():
 
 
 def get_data(**args_info):
-    print(args_info)
+    print("-- " + str(args_info))
     cmd_str = ["mysqlbinlog", "--base64-output=decode-rows  -vv"]
     for key, value in args_info.items():
         if key in ["--start-position", "--stop-position", "--start-datetime", "--stop-datetime", "start_file"]:
@@ -111,6 +112,6 @@ if __name__ == '__main__':
     conn = pymysql.Connect(**conn_setting)
     cur = conn.cursor() 
     result_data = get_data(**vars(args))
-    log2sql.get_binlog(result_data, cur)
+    log2sql.get_binlog(result_data, cur, args)
     conn.close()
 
