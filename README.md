@@ -12,4 +12,4 @@ for offline binlog,need server get schema
 使用示例:
 
    python3 main.py --start-position=4 --stop-position=1024  --start-file mysql-bin.000057 -h 127.0.0.1 --port 3306 -uroot -p
-   python3 main.py --start-position=4 --stop-position=1024  --start-file mysql-bin.000057 -h 127.0.0.1 --port 3306 -uroot -p --database='log_test' -t 'a' 'd'   
+   python3 main.py --start-position=4 --stop-position=1024  --start-file mysql-bin.000057 -h 127.0.0.1 --port 3306 -uroot -p --database='log_test' -t 'a'     'd'   
