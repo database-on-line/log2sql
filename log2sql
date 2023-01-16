@@ -4,8 +4,6 @@ import pymysql
 
 def format_sql(sql_list, cur):
     for sql_info_all in sql_list:
-        # conn = pymysql.Connect(host='127.0.0.1', port=3306, user='root', passwd='123@qwe', charset='utf8')
-        # cur = conn.cursor()
         dml_type = ""
         for sql_info in sql_info_all:
             if "insert" in sql_info.lower() or  "update" in sql_info.lower() or "delete" in sql_info.lower():
