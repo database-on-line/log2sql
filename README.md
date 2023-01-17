@@ -12,6 +12,7 @@ for offline binlog,need server get schema
 使用示例:
 
    python3 main.py --start-position=4 --stop-position=1024  --start-file mysql-bin.000057 -h 127.0.0.1 --port 3306 -uroot -p
+   
    python3 main.py --start-position=4 --stop-position=1024  --start-file mysql-bin.000057 -h 127.0.0.1 --port 3306 -uroot -p --database='log_test' -t 'a'     'd'   
 
 感谢:
@@ -21,4 +22,8 @@ for offline binlog,need server get schema
     
 未完成部分：
 
-   目前没有对ddl进行解析，且有一些功能没有测试完全，后期补上
+   1.目前没有对ddl进行解析，且有一些功能没有测试完全，后期补上
+   
+   2.指定-B时sql语句是正序输出，没有倒序输出
+   
+   3.sql语句上没有注释开始和中止的pos点
