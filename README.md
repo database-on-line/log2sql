@@ -22,8 +22,7 @@ for offline binlog,need server get schema
     
 未完成部分：
 
-   1.目前没有对ddl进行解析，且有一些功能没有测试完全，后期补上
    
-   2.指定-B时sql语句是正序输出，没有倒序输出
+   1.指定-B时sql语句是正序输出，没有倒序输出
    
-   3.sql语句上没有注释开始和中止的pos点
+  
