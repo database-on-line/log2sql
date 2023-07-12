@@ -25,4 +25,4 @@ for offline binlog,need server get schema
    
    1.指定-B时sql语句是正序输出，没有倒序输出
    添加测试分支 
-  
+   123 
